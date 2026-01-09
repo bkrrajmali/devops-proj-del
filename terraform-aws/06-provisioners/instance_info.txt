@@ -1,0 +1,1 @@
+'EC2 instance with public IP 3.239.76.242 is up and running' 

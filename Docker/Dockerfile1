@@ -1,0 +1,31 @@
+FROM maven:3.9.6-eclipse-temurin-17
+
+ENV TOMCAT_VERSION=9.0.89
+ENV CATALINA_HOME=/opt/tomcat
+ENV PATH=$CATALINA_HOME/bin:$PATH
+
+# Install git + download Tomcat 9
+RUN apt-get update && \
+    apt-get install -y git curl && \
+    curl -fSL https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz \
+    | tar xz -C /opt && \
+    ln -s /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Clone repository
+RUN git clone https://github.com/bkrrajmali/helloworld.git .
+
+# Build WAR
+RUN mvn clean package -DskipTests
+
+# Remove default apps
+RUN rm -rf $CATALINA_HOME/webapps/*
+
+# Deploy WAR
+RUN cp /app/webapp/target/*.war $CATALINA_HOME/webapps/ROOT.war
+
+# EXPOSE 8080
+
+CMD ["catalina.sh", "run"]
