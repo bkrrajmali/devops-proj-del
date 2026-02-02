@@ -1,0 +1,41 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: red-route
+spec:
+  parentRefs:
+  - name: azurecloudops-gateway
+  hostnames:
+  - "red.azuredevopscloud.xyz"
+  rules:
+  - backendRefs:
+    - name: red
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: blue-route
+spec:
+  parentRefs:
+  - name: azurecloudops-gateway
+  hostnames:
+  - "blue.azuredevopscloud.xyz"
+  rules:
+  - backendRefs:
+    - name: blue
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: green-route
+spec:
+  parentRefs:
+  - name: azurecloudops-gateway
+  hostnames:
+  - "green.azuredevopscloud.xyz"
+  rules:
+  - backendRefs:
+    - name: green
+      port: 80

@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubedevops
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+     - red.azuredevopscloud.xyz
+     - green.azuredevopscloud.xyz
+     - blue.azuredevopscloud.xyz
+    secretName: nginx-tls-default
+  rules:
+  - host: red.azuredevopscloud.xyz
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: red
+            port:
+              number: 80
+  - host: blue.azuredevopscloud.xyz
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: blue
+            port:
+              number: 80
+  - host: green.azuredevopscloud.xyz
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: green
+            port:
+              number: 80
